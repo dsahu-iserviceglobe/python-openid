@@ -1,15 +1,13 @@
-
-
-from openid.message import registerNamespaceAlias, \
-     NamespaceAliasRegistrationError
+from openid.message import (registerNamespaceAlias,
+     NamespaceAliasRegistrationError)
 from openid.extension import Extension
 from openid import oidutil
 
 try:
-    basestring #pylint:disable-msg=W0104
+    basestring
 except NameError:
     # For Python 2.2
-    basestring = (str, unicode) #pylint:disable-msg=W0622
+    basestring = (str, unicode)
 
 ns_uri = "http://specs.openid.net/extensions/oauth/1.0"
 #
@@ -17,7 +15,7 @@ try:
     registerNamespaceAlias(ns_uri, 'oauth')
 except NamespaceAliasRegistrationError, e:
     oidutil.log('registerNamespaceAlias(%r, %r) failed: %s' % (ns_uri,
-                                                               'oauth', str(e),))
+        'oauth', str(e),))
 
 
 class OAuthRequest(Extension):
@@ -30,7 +28,6 @@ class OAuthRequest(Extension):
         self.scope = scope
         self.ns_uri = oauth_ns_uri
 
-
     def fromOpenIDRequest(cls, request):
         self = cls()
 
@@ -42,10 +39,9 @@ class OAuthRequest(Extension):
     fromOpenIDRequest = classmethod(fromOpenIDRequest)
 
     def parseExtensionArgs(self, args, strict=False):
-        
+
         self.consumer = args['consumer']
         self.scope = args['scope']
-
 
     def getExtensionArgs(self):
         args = {}
@@ -58,6 +54,7 @@ class OAuthRequest(Extension):
 
         return args
 
+
 class OAuthResponse(Extension):
 
     ns_alias = 'oauth'
@@ -67,7 +64,6 @@ class OAuthResponse(Extension):
         self.ns_uri = ns_uri
         self.request_token = request_token
         self.scope = scope
-
 
     def fromSuccessResponse(cls, success_response, signed_only=True):
         self = cls()
@@ -96,4 +92,3 @@ class OAuthResponse(Extension):
             args['scope'] = self.scope
 
         return args
-
